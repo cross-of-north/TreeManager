@@ -27,8 +27,17 @@
         let level3Node41 = await TreeData.addNode(TreeData.getNodeId(level2Node4));
         let level3Node42 = await TreeData.addNode(TreeData.getNodeId(level2Node4));
     }
-    start().then(()=>{
-        TreeView.render( "treeView", TreeData );
-    })
+    function render() {
+        return TreeView.render( "treeView", TreeData );
+    }
+    start().then(()=>render());
+
+    TreeView.onInlineAddClick = function( id ) {
+        TreeData.addNode(id).then(()=>render());
+    }
+
+    TreeView.onInlineRemoveClick = function( id ) {
+        TreeData.removeNode(id).then(()=>render());
+    }
 </script>
 </body>

@@ -19,6 +19,10 @@ const TreeData = {
     return node.get( this.ID );
   },
 
+  getNodeParent: async function( node ) {
+    return this.getNode( this.getNodeParentId( node ) );
+  },
+
   getNodeParentId: function( node ) {
     return node.get( this.ID ).split( this.PATH_SEPARATOR ).slice( 0, -1 ).join( this.PATH_SEPARATOR );
   },
@@ -75,6 +79,16 @@ const TreeData = {
       parentNode.get( this.CHILDREN ).set( newId, node );
     }
     return node;
+  },
+
+  removeNode: async function( nodeId ) {
+    let node = ( nodeId.get === undefined ) ? await this.getNode( nodeId ) : nodeId;
+    if ( node !== undefined ) {
+      let parentNode = await this.getNodeParent(node);
+      if (parentNode !== undefined) {
+        parentNode.get(this.CHILDREN).delete( this.getShortId( this.getNodeId( node ) ) );
+      }
+    }
   },
 
   init: function() {

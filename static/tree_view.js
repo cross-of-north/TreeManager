@@ -1,10 +1,39 @@
 const TreeView = {
 
+  onInlineAddClick: function( id ) {
+    alert( "add to " + id )
+  },
+
+  onInlineRemoveClick: function( id ) {
+    alert( "remove " + id )
+  },
+
   flushRowPadding: function( row ) {
       if ( row.left_padding > 0 ) {
         row.append($('<td class="novalue" colspan="' + row.left_padding + '">&nbsp;</td>'));
       }
       row.left_padding = 0;
+  },
+
+  decorateCell: function( cell, nodeId ) {
+      if ( nodeId.length > 0 ) {
+        const inlineRemoveButton = $("<button class='inlineRemove'>[&#8211;]</button>");
+        inlineRemoveButton.click( () => this.onInlineRemoveClick( nodeId ) );
+        cell.prepend( inlineRemoveButton );
+      }
+      const inlineAddButton = $("<button class='inlineAdd'>[+]</button>");
+      inlineAddButton.click( () => this.onInlineAddClick( nodeId ) );
+      cell.append( inlineAddButton );
+      cell.hover(
+          ( event ) => $(event.target).find("button").css( "visibility", "visible" ),
+          ( event ) => $(event.target).find("button").css( "visibility", "hidden" )
+      );
+      // cell.mouseenter(
+      //     ( event ) => $(event.target).find("button").css( "visibility", "visible" )
+      // );
+      // cell.mouseleave(
+      //     ( event ) => $(event.target).find("button").css( "visibility", "hidden" )
+      // );
   },
 
   layoutNodeChildren: async function( treeData, node, rows, node_depth ) {
@@ -38,6 +67,7 @@ const TreeView = {
           "ID:" + treeData.nodeToString( child )
       //    + "(" + childSubtreeWidth + ") [" + row.left_padding + "]"
       );
+      this.decorateCell( cell, treeData.getNodeId( child ) );
       this.flushRowPadding( row );
       row.append( cell );
     }
@@ -50,7 +80,9 @@ const TreeView = {
     const rows = [];
     const rootNode = treeData.getRoot();
     const width = await this.layoutNodeChildren( treeData, rootNode, rows, 0 );
-    table.append($("<tr><th>Depth</th><th colspan='" + width + "'>Tree Nodes</th></tr>"));
+    const th = $("<th colspan='" + width + "'>Tree Nodes</th>");
+    this.decorateCell( th, "" );
+    table.append($("<tr>")).append($("<th>Depth</th>")).append(th);
     rows.forEach( ( row, index ) => {
       if ( row.children().length > 0 ) {
         this.flushRowPadding( row );
@@ -58,6 +90,7 @@ const TreeView = {
         table.append(row);
       }
     });
+    canvas.empty();
     canvas.append( table );
   },
 

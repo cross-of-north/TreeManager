@@ -5,13 +5,14 @@
 
 #treeView td, #treeView th {
     text-align: center;
+    vertical-align: center;
     border-width: 1px;
     border-color: black;
     border-style: solid;
     margin: 0;
     padding: 0;
-    padding-left: 0.3em;
-    padding-right: 0.3em;
+    /*padding-left: 0.3em;
+    padding-right: 0.3em;*/
 }
 
 #treeView th {
@@ -25,4 +26,23 @@
 .note {
     margin-top: 2ex;
     margin-bottom: 2ex;
+}
+
+button.inlineAdd, button.inlineRemove {
+    font-size: xx-small;
+    padding-top: 0;
+    padding-bottom: 0;
+    padding-left: 0ex;
+    padding-right: 0ex;
+    visibility: hidden;
+}
+
+button.inlineAdd {
+    margin-right: .1em; /* for mouseleave */
+    margin-left: 0;
+}
+
+button.inlineRemove {
+    margin-left: .1em; /* for mouseleave */
+    margin-right: 0;
 }
