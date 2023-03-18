@@ -1,0 +1,17 @@
+#treeView table {
+    border-spacing: 0;
+    border-collapse: collapse;
+}
+
+#treeView td {
+    text-align: center;
+    border-width: 1px;
+    border-color: black;
+    border-style: solid;
+    margin: 0;
+    padding: 0;
+}
+
+#treeView td.novalue {
+    background-color: #EEEEEE;
+}

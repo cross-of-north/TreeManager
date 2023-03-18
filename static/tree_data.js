@@ -9,6 +9,8 @@ const TreeData = {
 
   data: new Map(),
 
+  lastInternalId: 0,
+
   getRoot: function() {
     return this.data;
   },
@@ -58,7 +60,8 @@ const TreeData = {
     let parentNode = await this.getNode( parentId );
     if ( parentNode !== undefined ) {
       node = new Map();
-      let newId = "local_" + Date.now() + "_" + Math.random().toString(10).substring(2);
+      //let newId = "local_" + Date.now() + "_" + Math.random().toString(10).substring(2);
+      let newId = (++this.lastInternalId).toString(10);
       node.set( this.ID, parentNode.get( this.ID ) + this.PATH_SEPARATOR + newId );
       node.set( this.CHILDREN, new Map() );
       parentNode.get( this.CHILDREN ).set( newId, node );

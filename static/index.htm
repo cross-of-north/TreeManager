@@ -9,7 +9,6 @@
     <script src="/static/tree_view.js"></script>
   </head>
 <body>
-dfsdfasdf
 <div id="treeView"></div>
 <script>
     async function start() {
@@ -17,12 +16,18 @@ dfsdfasdf
         let level1Node1 = await TreeData.addNode(rootNode);
         let level1Node2 = await TreeData.addNode(rootNode);
         let level1Node3 = await TreeData.addNode(rootNode);
+        let level1Node4 = await TreeData.addNode(rootNode);
+        let level1Node5 = await TreeData.addNode(rootNode);
         let level2Node2 = await TreeData.addNode(TreeData.getNodeId(level1Node2));
+        let level2Node4 = await TreeData.addNode(TreeData.getNodeId(level1Node4));
+        let level2Node5 = await TreeData.addNode(TreeData.getNodeId(level1Node5));
+        let level3Node41 = await TreeData.addNode(TreeData.getNodeId(level2Node4));
+        let level3Node42 = await TreeData.addNode(TreeData.getNodeId(level2Node4));
     }
     start().then(()=>{
         TreeView.render( "treeView", TreeData );
     })
-
+/*
     function internalGenerator() {
         return new Promise((resolve)=>setTimeout( resolve, 1000 ));
     }
@@ -44,7 +49,7 @@ dfsdfasdf
     }
 
     run_gen().then();
-
+*/
 
 </script>
 </body>
