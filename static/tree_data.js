@@ -104,6 +104,12 @@ const TreeData = {
     }
   },
 
+  removeAll: async function() {
+    await this.storage.removeNode( "" );
+    this.data = new Map();
+    this.init();
+  },
+
   init: function() {
     this.data.set( this.ID, "" );
     this.data.set( this.CHILDREN, new Map() );

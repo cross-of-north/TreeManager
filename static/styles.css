@@ -37,11 +37,11 @@ button.inlineAdd, button.inlineRemove {
 }
 
 button.inlineAdd {
-    margin-right: .1em; /* for mouseleave */
+    margin-right: 0;
     margin-left: 0;
 }
 
 button.inlineRemove {
-    margin-left: .1em; /* for mouseleave */
+    margin-left: 0;
     margin-right: 0;
 }

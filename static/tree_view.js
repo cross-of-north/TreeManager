@@ -25,7 +25,13 @@ const TreeView = {
       inlineAddButton.click( () => this.onInlineAddClick( nodeId ) );
       cell.append( inlineAddButton );
       cell.hover(
-          ( event ) => $(event.target).find("button").css( "visibility", "visible" ),
+          ( event ) => {
+            if ( this.currentHover ) {
+              this.currentHover.css( "visibility", "hidden" );
+            }
+            this.currentHover = $(event.target).find("button");
+            this.currentHover.css( "visibility", "visible" );
+          },
           ( event ) => $(event.target).find("button").css( "visibility", "hidden" )
       );
   },

@@ -8,39 +8,15 @@
     <script src="/static/tree_data.js"></script>
     <script src="/static/tree_view.js"></script>
     <script src="/static/storage.js"></script>
+    <script src="/static/app.js"></script>
   </head>
 <body>
 <h1>Tree Manager</h1>
 <hr/>
 <div class="note">Current tree:</div>
 <div id="treeView"></div>
+<button onclick="App.onRandomFillClick()">Random fill</button>
 <script>
-    TreeData.setStorage( Storage );
-
-    async function start() {
-        let rootNode = await TreeData.addNode("");
-        let level1Node1 = await TreeData.addNode(rootNode);
-        let level1Node2 = await TreeData.addNode(rootNode);
-        let level1Node3 = await TreeData.addNode(rootNode);
-        let level1Node4 = await TreeData.addNode(rootNode);
-        let level1Node5 = await TreeData.addNode(rootNode);
-        let level2Node2 = await TreeData.addNode(TreeData.getNodeId(level1Node2));
-        let level2Node4 = await TreeData.addNode(TreeData.getNodeId(level1Node4));
-        let level2Node5 = await TreeData.addNode(TreeData.getNodeId(level1Node5));
-        let level3Node41 = await TreeData.addNode(TreeData.getNodeId(level2Node4));
-        let level3Node42 = await TreeData.addNode(TreeData.getNodeId(level2Node4));
-    }
-    function render() {
-        return TreeView.render( "treeView", TreeData );
-    }
-    start().then(()=>render());
-
-    TreeView.onInlineAddClick = function( id ) {
-        TreeData.addNode(id).then(()=>render());
-    }
-
-    TreeView.onInlineRemoveClick = function( id ) {
-        TreeData.removeNode(id).then(()=>render());
-    }
+    $( document ).ready( App.init().then() )
 </script>
 </body>

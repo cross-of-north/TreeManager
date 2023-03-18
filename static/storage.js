@@ -23,6 +23,9 @@ const Storage = {
     },
 
     removeNode: async function( id ) {
+        if ( !id.length ) {
+            id = "0";
+        }
         const o = await this.query( "nodes/" + id, {}, "DELETE" );
         return o !== undefined;
     },
