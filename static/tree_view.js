@@ -28,17 +28,11 @@ const TreeView = {
           ( event ) => $(event.target).find("button").css( "visibility", "visible" ),
           ( event ) => $(event.target).find("button").css( "visibility", "hidden" )
       );
-      // cell.mouseenter(
-      //     ( event ) => $(event.target).find("button").css( "visibility", "visible" )
-      // );
-      // cell.mouseleave(
-      //     ( event ) => $(event.target).find("button").css( "visibility", "hidden" )
-      // );
   },
 
   layoutNodeChildren: async function( treeData, node, rows, node_depth ) {
     const it = treeData.getNodeChildrenIterator( node );
-    let children_depth = node_depth + 1;
+    const children_depth = node_depth + 1;
     let child;
     let subtreeWidth = 0;
     while ( ( child = await it.next() ) && !child.done && ( child = child.value ) ) {
@@ -63,7 +57,7 @@ const TreeView = {
       const parentId = treeData.getNodeParentId( child );
       cell.text(
           //treeData.nodeToString( child )
-          "P:" + ( parentId.length == 0 ? "NONE" : treeData.nodeToString( parentId ) ) + " " +
+          "P:" + ( parentId.length == 0 ? "NONE" : treeData.nodeToString( parentId ) ) + "\xA0" +
           "ID:" + treeData.nodeToString( child )
       //    + "(" + childSubtreeWidth + ") [" + row.left_padding + "]"
       );

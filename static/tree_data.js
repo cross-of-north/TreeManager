@@ -11,6 +11,12 @@ const TreeData = {
 
   lastInternalId: 0,
 
+  storage: undefined,
+
+  setStorage: function( storage_ ) {
+    this.storage = storage_;
+  },
+
   getRoot: function() {
     return this.data;
   },
@@ -51,7 +57,7 @@ const TreeData = {
 
   getNode: async function( id ) {
     if ( id.get === undefined || id.get( this.ID ) === undefined ) {
-      let arPath = String(id).split(this.PATH_SEPARATOR);
+      const arPath = String(id).split(this.PATH_SEPARATOR);
       let node = this.data;
       for (const nodeId of arPath) {
         if (nodeId.length > 0) {
@@ -69,24 +75,31 @@ const TreeData = {
 
   addNode: async function( parentId ) {
     let node = undefined;
-    let parentNode = await this.getNode( parentId );
+    const parentNode = await this.getNode( parentId );
     if ( parentNode !== undefined ) {
-      node = new Map();
       //let newId = "local_" + Date.now() + "_" + Math.random().toString(10).substring(2);
-      let newId = (++this.lastInternalId).toString(10);
-      node.set( this.ID, parentNode.get( this.ID ) + this.PATH_SEPARATOR + newId );
-      node.set( this.CHILDREN, new Map() );
-      parentNode.get( this.CHILDREN ).set( newId, node );
+      let newId = "~" + (++this.lastInternalId).toString(10);
+      const storageNewId = await this.storage.addNode( this.getShortId(this.getNodeId(parentNode)) );
+      if ( storageNewId !== undefined ) {
+        newId = storageNewId.toString();
+      }
+      node = new Map();
+      node.set(this.ID, parentNode.get(this.ID) + this.PATH_SEPARATOR + newId);
+      node.set(this.CHILDREN, new Map());
+      parentNode.get(this.CHILDREN).set(newId, node);
     }
     return node;
   },
 
   removeNode: async function( nodeId ) {
-    let node = ( nodeId.get === undefined ) ? await this.getNode( nodeId ) : nodeId;
-    if ( node !== undefined ) {
-      let parentNode = await this.getNodeParent(node);
-      if (parentNode !== undefined) {
-        parentNode.get(this.CHILDREN).delete( this.getShortId( this.getNodeId( node ) ) );
+    const node = (nodeId.get === undefined) ? await this.getNode(nodeId) : nodeId;
+    const shortId = this.getShortId(this.getNodeId(node));
+    if ( await this.storage.removeNode( shortId ) ) {
+      if (node !== undefined) {
+        const parentNode = await this.getNodeParent(node);
+        if (parentNode !== undefined) {
+          parentNode.get(this.CHILDREN).delete(this.getShortId(this.getNodeId(node)));
+        }
       }
     }
   },
