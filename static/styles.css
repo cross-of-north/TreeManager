@@ -21,3 +21,8 @@
 #treeView td.novalue {
     background-color: #EEEEEE;
 }
+
+.note {
+    margin-top: 2ex;
+    margin-bottom: 2ex;
+}
