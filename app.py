@@ -1,6 +1,7 @@
+import json
 import os
 
-from flask import Flask, send_from_directory, session
+from flask import Flask, send_from_directory
 from flask_restful import Resource, Api
 
 from db import Database
@@ -31,7 +32,12 @@ class Nodes(Resource):
             self.db.connect()
 
     def get(self, node_id):
-        return {"id": node_id}
+        self.connect()
+        if int(node_id) == 0:
+            nodes = self.db.get_scope_nodes(self.scope)
+            return ({}, 500) if nodes is None else nodes
+        else:
+            return {}, 501 #not implemented
 
     def delete(self, node_id):
         self.connect()

@@ -44,6 +44,24 @@ class Database:
 
         return node_id
 
+    def get_scope_nodes(self, scope, root=None) -> list:
+        result = None
+        if self.connect():
+            try:
+                if root is None:
+                    root = self.get_root(scope)
+                if root is not None:
+                    with self.db.cursor() as cursor:
+                        cursor.execute("SELECT ID, PARENT FROM nodes WHERE ROOT=%s ORDER BY ID ASC", (root,))
+                        result = []
+                        for row in cursor.fetchall():
+                            result.append(row)
+
+            except mysql.connector.Error as e:
+                self.log.error(repr(e))
+
+        return result
+
     def get_children(self, scope, parent_id, root=None) -> list:
         result = None
         if self.connect():

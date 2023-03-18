@@ -44,13 +44,13 @@ const TreeView = {
     while ( ( child = await it.next() ) && !child.done && ( child = child.value ) ) {
       while ( rows.length <= children_depth ) { // one row more than needed
         const newRow = $('<tr>');
-        newRow.left_padding = rows.length == 0 ? 0 : rows[ rows.length - 1 ].left_padding;
+        newRow.left_padding = rows.length === 0 ? 0 : rows[ rows.length - 1 ].left_padding;
         rows[ rows.length ] = newRow;
       }
       const row = rows[ node_depth ];
       subtreeWidth++;
       let childSubtreeWidth = await this.layoutNodeChildren( treeData, child, rows, children_depth );
-      if ( childSubtreeWidth == 0 ) {
+      if ( childSubtreeWidth === 0 ) {
         // no children below
         // add padding to all rows
         for ( let rowBelowNumber = children_depth; rowBelowNumber < rows.length; rowBelowNumber++ ) {
@@ -63,7 +63,7 @@ const TreeView = {
       const parentId = treeData.getNodeParentId( child );
       cell.text(
           //treeData.nodeToString( child )
-          "P:" + ( parentId.length == 0 ? "NONE" : treeData.nodeToString( parentId ) ) + "\xA0" +
+          "P:" + ( parentId.length === 0 ? "NONE" : treeData.nodeToString( parentId ) ) + "\xA0" +
           "ID:" + treeData.nodeToString( child )
       //    + "(" + childSubtreeWidth + ") [" + row.left_padding + "]"
       );

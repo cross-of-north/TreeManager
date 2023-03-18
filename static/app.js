@@ -23,8 +23,9 @@ const App = {
 
     init: async function() {
         TreeData.setStorage( Storage );
-        let rootNode = await TreeData.addNode("");
-        await this.randomPopulate( 20 );
+        await TreeData.loadFromStorage();
+
+        //await this.randomPopulate( 20 );
 
         /*
         let rootNode = await TreeData.addNode("");

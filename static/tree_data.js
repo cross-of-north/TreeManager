@@ -41,9 +41,9 @@ const TreeData = {
     return this.getShortId( node.get === undefined ? node : node.get( this.ID ) );
   },
 
-  getNodeChildrenCount: async function( node ) {
-    return node.get( this.CHILDREN ).size;
-  },
+  // getNodeChildrenCount: async function( node ) {
+  //   return node.get( this.CHILDREN ).size;
+  // },
 
   getNodeChildrenIterator: async function* ( node ) {
     for (let child of node.get( this.CHILDREN )) {
@@ -73,6 +73,14 @@ const TreeData = {
     }
   },
 
+  createNode: function( parentNode, newId ) {
+    const node = new Map();
+    node.set(this.ID, parentNode.get(this.ID) + this.PATH_SEPARATOR + newId);
+    node.set(this.CHILDREN, new Map());
+    parentNode.get(this.CHILDREN).set(newId, node);
+    return node;
+  },
+
   addNode: async function( parentId ) {
     let node = undefined;
     const parentNode = await this.getNode( parentId );
@@ -83,10 +91,7 @@ const TreeData = {
       if ( storageNewId !== undefined ) {
         newId = storageNewId.toString();
       }
-      node = new Map();
-      node.set(this.ID, parentNode.get(this.ID) + this.PATH_SEPARATOR + newId);
-      node.set(this.CHILDREN, new Map());
-      parentNode.get(this.CHILDREN).set(newId, node);
+      node = this.createNode( parentNode, newId );
     }
     return node;
   },
@@ -108,6 +113,25 @@ const TreeData = {
     await this.storage.removeNode( "" );
     this.data = new Map();
     this.init();
+  },
+
+  loadFromStorage: async function() {
+    this.data = new Map();
+    this.init();
+    const nodes = await this.storage.getAllNodes();
+    const node_map = new Map();
+    node_map.set("0", this.data);
+    if ( nodes !== undefined ) {
+      for ( let nodeData of nodes ) {
+        const nodeId = "" + nodeData[0];
+        const parentId = "" + nodeData[1];
+        const parentNode = node_map.get( parentId );
+        if ( parentNode !== undefined ) {
+          const node = this.createNode( parentNode, nodeId );
+          node_map.set(nodeId, node);
+        }
+      }
+    }
   },
 
   init: function() {
