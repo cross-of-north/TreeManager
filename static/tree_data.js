@@ -1,3 +1,4 @@
+
 const TreeData = {
 
   // current ID format is a full path
@@ -8,32 +9,25 @@ const TreeData = {
 
   data: new Map(),
 
+  getRoot: function() {
+    return this.data;
+  },
+
   getNodeId: function( node ) {
     return node.get( this.ID );
   },
 
-  // https://davidwalsh.name/async-generators
-  doGetNodeChildren: function( node, context ) {
-    let internalIterator = new Promise( (resolve,reject) => {
-      const it = context.it;
-      delete context.it;
-      it.next( node.get( this.CHILDREN ) );
-    } );
-    setTimeout( () => internalIterator.resolve(), 0 );
+  nodeToString: function( node ) {
+    return node.get( this.ID ).split( this.PATH_SEPARATOR ).slice( -1 )[ 0 ];
   },
 
-  getNodeChildrenWrapper: function* ( node, context ) {
-    yield this.doGetNodeChildren( node, context.it );
+  getNodeChildrenCount: async function( node ) {
+    return node.get( this.CHILDREN ).size;
   },
 
-  iterateNodeChildren: function* ( node ) {
-    let context = {};
-    context.it = this.getNodeChildrenWrapper( node, context );
-    while ( context.it !== undefined ) {
-      let childrenBatch = context.it.next();
-      for ( let child of childrenBatch ) {
-        yield child;
-      }
+  getNodeChildrenIterator: async function* ( node ) {
+    for (let child of node.get( this.CHILDREN )) {
+      yield child[ 1 ];
     }
   },
 
