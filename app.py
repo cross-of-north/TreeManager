@@ -2,12 +2,11 @@ import os
 
 from flask import Flask, send_from_directory, session
 from flask_restful import Resource, Api
-from flask_session import Session
+
+from db import Database
+from log import Log
 
 app = Flask(__name__)
-SESSION_TYPE = 'filesystem'
-app.config.from_object(__name__)
-Session(app)
 
 
 @app.route("/")
@@ -16,21 +15,32 @@ def return_index_file():
 
 
 api = Api(app)
+log = Log(app)
 
 
 class Nodes(Resource):
+
+    scope = 1
+
+    def __init__(self):
+        self.db = None
+
+    def connect(self):
+        if self.db is None:
+            self.db = Database(log)
+            self.db.connect()
 
     def get(self, node_id):
         return {"id": node_id}
 
     def delete(self, node_id):
-        return {}
+        self.connect()
+        return {}, (200 if self.db.remove_node(self.scope, node_id) else 500)
 
     def put(self, node_id):
-        if not "counter" in session:
-            session["counter"] = 0
-        session["counter"] = session["counter"] + 1
-        return {"id": session["counter"]}
+        self.connect()
+        db_id = self.db.add_node(self.scope, node_id)
+        return ({}, 500) if db_id is None else ({"id": db_id}, 200)
 
 
 api.add_resource(Nodes, '/api/nodes/<string:node_id>')
