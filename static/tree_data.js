@@ -19,8 +19,16 @@ const TreeData = {
     return node.get( this.ID );
   },
 
+  getNodeParentId: function( node ) {
+    return node.get( this.ID ).split( this.PATH_SEPARATOR ).slice( 0, -1 ).join( this.PATH_SEPARATOR );
+  },
+
+  getShortId: function( id ) {
+    return id.split( this.PATH_SEPARATOR ).slice( -1 )[ 0 ];
+  },
+
   nodeToString: function( node ) {
-    return node.get( this.ID ).split( this.PATH_SEPARATOR ).slice( -1 )[ 0 ];
+    return this.getShortId( node.get === undefined ? node : node.get( this.ID ) );
   },
 
   getNodeChildrenCount: async function( node ) {

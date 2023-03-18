@@ -3,13 +3,19 @@
     border-collapse: collapse;
 }
 
-#treeView td {
+#treeView td, #treeView th {
     text-align: center;
     border-width: 1px;
     border-color: black;
     border-style: solid;
     margin: 0;
     padding: 0;
+    padding-left: 0.3em;
+    padding-right: 0.3em;
+}
+
+#treeView th {
+    font-weight: bold;
 }
 
 #treeView td.novalue {

@@ -31,7 +31,11 @@ const TreeView = {
       }
       subtreeWidth += childSubtreeWidth - 1;
       const cell = $('<td colspan="' + childSubtreeWidth + '">');
-      cell.text( treeData.nodeToString( child )
+      const parentId = treeData.getNodeParentId( child );
+      cell.text(
+          //treeData.nodeToString( child )
+          "P:" + ( parentId.length == 0 ? "NONE" : treeData.nodeToString( parentId ) ) + " " +
+          "ID:" + treeData.nodeToString( child )
       //    + "(" + childSubtreeWidth + ") [" + row.left_padding + "]"
       );
       this.flushRowPadding( row );
@@ -45,10 +49,12 @@ const TreeView = {
     const table = $('<table>');
     const rows = [];
     const rootNode = treeData.getRoot();
-    await this.layoutNodeChildren( treeData, rootNode, rows, 0 );
-    rows.forEach( row => {
+    const width = await this.layoutNodeChildren( treeData, rootNode, rows, 0 );
+    table.append($("<tr><th>Depth</th><th colspan='" + width + "'>Tree Nodes</th></tr>"));
+    rows.forEach( ( row, index ) => {
       if ( row.children().length > 0 ) {
         this.flushRowPadding( row );
+        row.prepend("<td>" + index + "</td>")
         table.append(row);
       }
     });

@@ -27,29 +27,5 @@
     start().then(()=>{
         TreeView.render( "treeView", TreeData );
     })
-/*
-    function internalGenerator() {
-        return new Promise((resolve)=>setTimeout( resolve, 1000 ));
-    }
-
-    async function* externalGenerator() {
-        for( let i = 0; i < 5; i++ ) {
-            await internalGenerator();
-            yield i;
-        }
-    }
-
-    async function run_gen() {
-        let gen = externalGenerator();
-        let next;
-        do {
-            next = await gen.next();
-            console.log(next.value);
-        } while ( next && !next.done );
-    }
-
-    run_gen().then();
-*/
-
 </script>
 </body>
