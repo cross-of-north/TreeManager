@@ -3,11 +3,17 @@ import mysql.connector
 from _mysql_connector import MySQLInterfaceError
 from mysql.connector.cursor_cext import CMySQLCursor
 
-db_host = os.environ.get('TREEMANAGER_DB_HOST')
-db_port = os.environ.get('TREEMANAGER_DB_PORT')
-db_user = os.environ.get('TREEMANAGER_DB_USER')
-db_password = os.environ.get('TREEMANAGER_DB_PASSWORD')
-db_name = os.environ.get('TREEMANAGER_DB_NAME')
+db_host_s = 'TREEMANAGER_DB_HOST'
+db_port_s = 'TREEMANAGER_DB_PORT'
+db_user_s = 'TREEMANAGER_DB_USER'
+db_password_s = 'TREEMANAGER_DB_PASSWORD'
+db_name_s = 'TREEMANAGER_DB_NAME'
+
+db_host = os.environ.get(db_host_s)
+db_port = os.environ.get(db_port_s)
+db_user = os.environ.get(db_user_s)
+db_password = os.environ.get(db_password_s)
+db_name = os.environ.get(db_name_s)
 
 SCHEMA_VERSION = 1
 
@@ -63,6 +69,15 @@ class Database:
         if self.db is None:
             result = False
             try:
+                if db_host is None or len(db_host) == 0:
+                    self.log.error("Environment variable " + db_host_s + " must be defined")
+                    return False
+                if db_user is None or len(db_user) == 0:
+                    self.log.error("Environment variable " + db_user_s + " must be defined")
+                    return False
+                if db_name is None or len(db_name) == 0:
+                    self.log.error("Environment variable " + db_name_s + " must be defined")
+                    return False
                 self.db = mysql.connector.connect(
                     host=db_host,
                     port=db_port,
