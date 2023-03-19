@@ -73,6 +73,22 @@ const TreeData = {
     }
   },
 
+  findNodeByShortId: async function( shortId, rootNode ) {
+    if ( rootNode === undefined ) {
+      rootNode = this.data;
+    }
+    const children = rootNode.get(this.CHILDREN);
+    let node = children.get(shortId);
+    if ( node === undefined ) {
+      for (let child of children) {
+        if ( ( node = this.findNodeByShortId( shortId, child[1] ) ) !== undefined ) {
+          break;
+        }
+      }
+    }
+    return node;
+  },
+
   createNode: function( parentNode, newId ) {
     const node = new Map();
     node.set(this.ID, parentNode.get(this.ID) + this.PATH_SEPARATOR + newId);

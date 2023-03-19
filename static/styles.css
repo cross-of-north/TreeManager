@@ -45,3 +45,17 @@ button.inlineRemove {
     margin-left: 0;
     margin-right: 0;
 }
+
+@keyframes fadeIn {
+    from { opacity: 10%; }
+    to { opacity: 70%; }
+}
+
+#messages.blink {
+    animation: fadeIn .5s infinite alternate;
+}
+
+#messages {
+    margin-top: 1ex;
+    margin-bottom: 1ex;
+}

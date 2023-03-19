@@ -3,7 +3,7 @@ const App = {
 
     onRandomFillClick: async function() {
         await TreeData.removeAll();
-        await this.randomPopulate( 20 );
+        await this.randomPopulate( $("#randomFillInput").val() * 1 );
         return this.render();
     },
 
@@ -22,6 +22,7 @@ const App = {
     },
 
     init: async function() {
+        Storage.setLog( Log );
         TreeData.setStorage( Storage );
         await TreeData.loadFromStorage();
 
