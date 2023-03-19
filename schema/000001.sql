@@ -1,0 +1,26 @@
+CREATE TABLE IF NOT EXISTS `nodes` (
+  `ID` bigint NOT NULL AUTO_INCREMENT,
+  `PARENT` bigint NOT NULL,
+  `ROOT` bigint NOT NULL,
+  PRIMARY KEY (`ID`),
+  KEY `IX_PARENT` (`PARENT`),
+  KEY `IX_ROOT` (`ROOT`)
+) ENGINE=InnoDB;
+
+CREATE TABLE IF NOT EXISTS `options` (
+  `NAME` varchar(256) NOT NULL,
+  `VALUE` text NOT NULL,
+  PRIMARY KEY (`NAME`)
+) ENGINE=InnoDB;
+
+INSERT INTO `options` (`NAME`, `VALUE`) VALUES
+('schema_version', '1');
+
+CREATE TABLE IF NOT EXISTS `scopes` (
+  `ID` bigint NOT NULL AUTO_INCREMENT,
+  `ROOT_ID` bigint NOT NULL,
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB AUTO_INCREMENT=2;
+
+INSERT INTO `scopes` (`ID`, `ROOT_ID`) VALUES
+(1, 0);

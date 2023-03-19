@@ -13,7 +13,16 @@ const Storage = {
         let init = {
             method: method,
         };
-        const response = await fetch( this.apiUrl + url, init );
+        let response;
+        try {
+            response = await fetch(this.apiUrl + url, init);
+        } catch (e) {
+            response = {
+                ok: false,
+                status: "Network error",
+                statusText: e.toString(),
+            }
+        }
         if ( response.ok ) {
             this.log.clear();
         } else {

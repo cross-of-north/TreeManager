@@ -1,4 +1,3 @@
-import json
 import os
 
 from flask import Flask, send_from_directory
@@ -26,27 +25,35 @@ class Nodes(Resource):
     def __init__(self):
         self.db = None
 
-    def connect(self):
-        if self.db is None:
-            self.db = Database(log)
-            self.db.connect()
+    def connect(self) -> bool:
+        result = False if self.db is None else True
+        if not result:
+            self.db = Database(app, log)
+            result = self.db.connect()
+        return result
 
     def get(self, node_id):
-        self.connect()
-        if int(node_id) == 0:
-            nodes = self.db.get_scope_nodes(self.scope)
-            return ({}, 500) if nodes is None else nodes
+        if self.connect():
+            if int(node_id) == 0:
+                nodes = self.db.get_scope_nodes(self.scope)
+                return ({}, 500) if nodes is None else nodes
+            else:
+                return {}, 501  # not implemented
         else:
-            return {}, 501 #not implemented
+            return {}, 500
 
     def delete(self, node_id):
-        self.connect()
-        return {}, (200 if self.db.remove_node(self.scope, node_id) else 500)
+        if self.connect():
+            return {}, (200 if self.db.remove_node(self.scope, node_id) else 500)
+        else:
+            return {}, 500
 
     def put(self, node_id):
-        self.connect()
-        db_id = self.db.add_node(self.scope, node_id)
-        return ({}, 500) if db_id is None else ({"id": db_id}, 200)
+        if self.connect():
+            db_id = self.db.add_node(self.scope, node_id)
+            return ({}, 500) if db_id is None else ({"id": db_id}, 200)
+        else:
+            return {}, 500
 
 
 api.add_resource(Nodes, '/api/nodes/<string:node_id>')
