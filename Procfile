@@ -1,1 +1,1 @@
-web: bin/start-nginx gunicorn server/app:app -p /tmp/app-initialized --log-file - --bind 127.0.0.1:8087
+web: bin/start-nginx gunicorn app:app -p /tmp/app-initialized --log-file - --bind 127.0.0.1:8087
