@@ -1,6 +1,11 @@
-
+/**
+ * Main application object.
+ */
 const App = {
 
+    /**
+     * "Add Node To" button click handler.
+     */
     onAddToClick: async function() {
         Log.clear();
         const id = $("#addToInput").val();
@@ -13,17 +18,28 @@ const App = {
         }
     },
 
+    /**
+     * "Random Fill" button click handler.
+     */
     onRandomFillClick: async function() {
+        // TODO: batch mode
         Log.clear();
         await TreeData.removeAll();
         await this.randomPopulate( $("#randomFillInput").val() * 1 );
         return this.render();
     },
 
+    /**
+     * Redraws the tree visual representation.
+     */
     render: function() {
         return TreeView.render( "treeView", TreeData );
     },
 
+    /**
+     * Creates a new tree of N random nodes.
+     * The old tree is deleted.
+     */
     randomPopulate: async function( count ) {
         let rootNode = await TreeData.addNode("");
         const nodes = [ rootNode ];
@@ -34,47 +50,43 @@ const App = {
         }
     },
 
+    /**
+     * Application initialization.
+     */
     init: async function() {
+
+        // link objects together
         Storage.setLog( Log );
         TreeData.setStorage( Storage );
+
+        // load a saved tree from the server
         await TreeData.loadFromStorage();
 
-        //await this.randomPopulate( 20 );
-
-        /*
-        let rootNode = await TreeData.addNode("");
-        let level1Node1 = await TreeData.addNode(rootNode);
-        let level1Node2 = await TreeData.addNode(rootNode);
-        let level1Node3 = await TreeData.addNode(rootNode);
-        let level1Node4 = await TreeData.addNode(rootNode);
-        let level1Node5 = await TreeData.addNode(rootNode);
-        let level2Node2 = await TreeData.addNode(TreeData.getNodeId(level1Node2));
-        let level2Node4 = await TreeData.addNode(TreeData.getNodeId(level1Node4));
-        let level2Node5 = await TreeData.addNode(TreeData.getNodeId(level1Node5));
-        let level3Node41 = await TreeData.addNode(TreeData.getNodeId(level2Node4));
-        let level3Node42 = await TreeData.addNode(TreeData.getNodeId(level2Node4));
-        */
-
+        // register a handler for inline node add button
         TreeView.onInlineAddClick = function( id ) {
             TreeData.addNode(id).then( function() { App.render() } );
         }
 
+        // register a handler for inline node remove button
         TreeView.onInlineRemoveClick = function( id ) {
             TreeData.removeNode(id).then( function() { App.render() } );
         }
 
+        // keyboard "Add To" value submit support
         $('#addToInput').keypress( function(e) {
             if ( e.keyCode === 13 ) {
                 $('#addToButton').click();
             }
         } );
 
+        // keyboard "Random Fill" value submit support
         $('#randomFillInput').keypress( function(e) {
             if ( e.keyCode === 13 ) {
                 $('#randomFillButton').click();
             }
         } );
 
+        // initial rendering of the tree loaded from the server
         this.render().then();
     },
 

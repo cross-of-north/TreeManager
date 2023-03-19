@@ -1,3 +1,6 @@
+/**
+ * Single-line-display logger sink
+ */
 
 const Log = {
 
