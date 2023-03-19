@@ -7,7 +7,7 @@ from flask_restful import Resource, Api
 from db import Database
 from log import Log
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder='../static')
 Compress(app)
 
 
@@ -18,7 +18,7 @@ def rewrite(url):
 
 @app.route("/")
 def return_index_file():
-    return send_from_directory(os.path.join(app.root_path, "static"), "index.htm")
+    return send_from_directory(os.path.join(app.root_path, "../static"), "index.htm")
 
 
 @app.route('/favicon.ico')

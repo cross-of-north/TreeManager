@@ -34,7 +34,7 @@ class Database:
     def upgrade_schema_version(self) -> bool:
         result = False
 
-        with open(os.path.join(self.app.root_path, "schema", "000001.sql")) as sql_file:
+        with open(os.path.join(self.app.root_path, "../schema", "000001.sql")) as sql_file:
             cursor = self.query(sql_file.read(), params=None, multi=True)
             try:
                 res: CMySQLCursor
