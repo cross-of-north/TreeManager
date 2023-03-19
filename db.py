@@ -37,6 +37,7 @@ class Database:
         with open(os.path.join(self.app.root_path, "schema", "000001.sql")) as sql_file:
             cursor = self.query(sql_file.read(), params=None, multi=True)
             try:
+                res: CMySQLCursor
                 for res in cursor:
                     self.log.info(str(res.rowcount) + " rows affected by query: " + res.statement)
                 self.db.commit()
