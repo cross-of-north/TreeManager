@@ -46,16 +46,38 @@ button.inlineRemove {
     margin-right: 0;
 }
 
-@keyframes fadeIn {
-    from { opacity: 10%; }
-    to { opacity: 70%; }
-}
-
-#messages.blink {
-    animation: fadeIn .5s infinite alternate;
+@keyframes fadeOut {
+    from { opacity: 70%; }
+    to { opacity: 10%; }
 }
 
 #messages {
     margin-top: 1ex;
     margin-bottom: 1ex;
+    min-height: 3ex;
+}
+
+#messages.info {
+    background-color: inherit;
+    color: inherit;
+    font-weight: inherit;
+}
+
+#messages.error {
+    background-color: inherit;
+    color: red;
+    font-weight: bold;
+}
+
+#messages.blink {
+    animation: fadeOut .5s infinite alternate;
+}
+
+#randomFillInput {
+    margin-top: 1ex;
+    margin-right: .3em;
+}
+
+#addToInput {
+    margin-right: .3em;
 }

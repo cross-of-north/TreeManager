@@ -1,7 +1,20 @@
 
 const App = {
 
+    onAddToClick: async function() {
+        Log.clear();
+        const id = $("#addToInput").val();
+        const node = await TreeData.findNodeByShortId( id );
+        if ( node === undefined ) {
+            Log.error( "Node with id " + id + " is not found." );
+        } else {
+            await TreeData.addNode( node );
+            App.render().then();
+        }
+    },
+
     onRandomFillClick: async function() {
+        Log.clear();
         await TreeData.removeAll();
         await this.randomPopulate( $("#randomFillInput").val() * 1 );
         return this.render();
@@ -49,6 +62,18 @@ const App = {
         TreeView.onInlineRemoveClick = function( id ) {
             TreeData.removeNode(id).then( function() { App.render() } );
         }
+
+        $('#addToInput').keypress( function(e) {
+            if ( e.keyCode === 13 ) {
+                $('#addToButton').click();
+            }
+        } );
+
+        $('#randomFillInput').keypress( function(e) {
+            if ( e.keyCode === 13 ) {
+                $('#randomFillButton').click();
+            }
+        } );
 
         this.render().then();
     },

@@ -8,24 +8,19 @@ const Log = {
     },
 
     info: function( s, bWait ) {
-        const el = this.write( s ).
-            css( "background-color", "default" ).
-            css( "text-color", "default" ).
-            css( "font-weight", "default" );
-        if ( bWait ) {
-            el.addClass("blink");
-        }
+        this.clear();
+        return this.write( s ).addClass( "info" + ( bWait ? " blink" : "" ) );
     },
 
     error: function( s ) {
-        this.write( s ).
-            css( "background-color", "default" ).
-            css( "color", "red" ).
-            css( "font-weight", "bold" ).
-            removeClass("blink");
+        this.clear();
+        return this.write( s ).addClass( "error" );
     },
 
     clear: function() {
-        this.info( "\xA0" );
+        return this.write( "\xA0" ).
+            removeClass( "error" ).
+            removeClass( "info" ).
+            removeClass( "blink" );
     },
 }

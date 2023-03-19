@@ -74,15 +74,20 @@ const TreeData = {
   },
 
   findNodeByShortId: async function( shortId, rootNode ) {
+    let node;
     if ( rootNode === undefined ) {
       rootNode = this.data;
     }
-    const children = rootNode.get(this.CHILDREN);
-    let node = children.get(shortId);
-    if ( node === undefined ) {
-      for (let child of children) {
-        if ( ( node = this.findNodeByShortId( shortId, child[1] ) ) !== undefined ) {
-          break;
+    if ( String( shortId ).length === 0 ) {
+      node = this.data;
+    } else {
+      const children = rootNode.get(this.CHILDREN);
+      node = children.get(shortId);
+      if (node === undefined) {
+        for (let child of children) {
+          if ((node = await this.findNodeByShortId(shortId, child[1])) !== undefined) {
+            break;
+          }
         }
       }
     }

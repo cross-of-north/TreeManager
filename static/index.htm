@@ -18,8 +18,9 @@
 <div class="note">Current tree:</div>
 <div id="treeView"></div>
 <div id="messages">&nbsp;</div>
-<button onclick="App.onRandomFillClick()" id="randomFillButton">Random fill</button>
-<input type="number" id="randomFillInput" value="20"/>
+Add node to: <input type="text" id="addToInput"/><button onclick="App.onAddToClick()" id="addToButton">Add</button>
+<br/>
+Random fill: <input type="number" id="randomFillInput" value="20"/><button onclick="App.onRandomFillClick()" id="randomFillButton">Fill</button>
 
 <script>
     $( document ).ready( App.init().then() )
