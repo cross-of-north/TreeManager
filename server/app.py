@@ -4,8 +4,8 @@ from flask import Flask, send_from_directory, request
 from flask_compress import Compress
 from flask_restful import Resource, Api
 
-from .db import Database
-from .log import Log
+from server.db import Database
+from server.log import Log
 
 app = Flask(__name__, static_folder='../static')
 Compress(app)
