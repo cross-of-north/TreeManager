@@ -106,13 +106,11 @@ const TreeData = {
     let node = undefined;
     const parentNode = await this.getNode( parentId );
     if ( parentNode !== undefined ) {
-      //let newId = "local_" + Date.now() + "_" + Math.random().toString(10).substring(2);
-      let newId = "~" + (++this.lastInternalId).toString(10);
       const storageNewId = await this.storage.addNode( this.getShortId(this.getNodeId(parentNode)) );
       if ( storageNewId !== undefined ) {
-        newId = storageNewId.toString();
+        let newId = storageNewId.toString();
+        node = this.createNode( parentNode, newId );
       }
-      node = this.createNode( parentNode, newId );
     }
     return node;
   },

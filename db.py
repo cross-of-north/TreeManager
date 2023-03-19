@@ -89,6 +89,20 @@ class Database:
 
         return node_id
 
+    def can_access_node(self, scope, node_id) -> bool:
+        result = False
+
+        root = self.get_root(scope)
+        if root is not None:
+            if int(root) == int(node_id):
+                result = True
+            else:
+                query = "SELECT * FROM nodes WHERE ID=%s AND ROOT=%s"
+                cursor = self.query(query, (node_id, root))
+                result = cursor is not None and cursor.fetchone() is not None
+
+        return result
+
     def get_scope_nodes(self, scope, root=None) -> list:
         result = None
 
@@ -108,7 +122,7 @@ class Database:
 
         if root is None:
             root = self.get_root(scope)
-        if root is not None:
+        if root is not None and self.can_access_node(scope, parent_id):
             cursor = self.query("SELECT ID FROM nodes WHERE PARENT=%s AND ROOT=%s", (parent_id, root))
             if cursor is not None:
                 result = []
@@ -121,7 +135,7 @@ class Database:
         node_id = None
 
         root = self.get_root(scope)
-        if root is not None:
+        if root is not None and self.can_access_node(scope, parent):
             query = "INSERT INTO nodes (PARENT, ROOT) VALUES ( %s, %s )"
             cursor = self.query(query, (parent, root))
             if cursor is not None:
@@ -145,9 +159,10 @@ class Database:
                     break
             if result:
                 result = False
-                cursor = self.query('DELETE FROM nodes WHERE ID=%s AND ROOT=%s LIMIT 1', (node_id, root))
-                if cursor is not None:
-                    result = (cursor.rowcount > 0)
+                if self.can_access_node(scope, node_id):
+                    cursor = self.query('DELETE FROM nodes WHERE ID=%s AND ROOT=%s LIMIT 1', (node_id, root))
+                    if cursor is not None:
+                        result = (cursor.rowcount > 0)
 
         return result
 
