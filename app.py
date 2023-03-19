@@ -1,17 +1,29 @@
 import os
 
-from flask import Flask, send_from_directory
+from flask import Flask, send_from_directory, request
+from flask_compress import Compress
 from flask_restful import Resource, Api
 
 from db import Database
 from log import Log
 
 app = Flask(__name__)
+Compress(app)
+
+
+def rewrite(url):
+    view_func, view_args = app.create_url_adapter(request).match(url)
+    return app.view_functions[view_func](**view_args)
 
 
 @app.route("/")
 def return_index_file():
     return send_from_directory(os.path.join(app.root_path, "static"), "index.htm")
+
+
+@app.route('/favicon.ico')
+def the_rewritten_one():
+    return rewrite('/static/favicon.ico')
 
 
 api = Api(app)
